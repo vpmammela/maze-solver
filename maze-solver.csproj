@@ -8,4 +8,10 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="mazes\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="mazes\" />
+  </ItemGroup>
 </Project>
