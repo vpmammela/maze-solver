@@ -5,7 +5,8 @@ using System.IO;
 public class MazeSolver
 {
     private readonly string[] maze;
-    private readonly int startX, startY, endX, endY;
+    private readonly int startX, startY;
+    private readonly List<(int x, int y)> endPositions;
     private readonly bool[,] visited;
     private readonly int[] dx = { 1, -1, 0, 0 };
     private readonly int[] dy = { 0, 0, 1, -1 };
@@ -13,6 +14,9 @@ public class MazeSolver
     public MazeSolver(string file)
     {
         maze = File.ReadAllLines($"./mazes/{file}");
+
+        endPositions = new List<(int x, int y)>();
+        visited = new bool[maze.Length, maze[0].Length];
 
         for (int i = 0; i < maze.Length; i++)
         {
@@ -25,18 +29,15 @@ public class MazeSolver
                 }
                 else if (maze[i][j] == 'E')
                 {
-                    endX = i;
-                    endY = j;
+                    endPositions.Add((i, j));
                 }
             }
         }
 
-        if (startX == -1 || startY == -1 || endX == -1 || endY == -1)
+        if (startX == -1 || startY == -1 || endPositions.Count == 0)
         {
             throw new InvalidOperationException("Maze does not contain starting and ending positions.");
         }
-
-        visited = new bool[maze.Length, maze[0].Length];
     }
 
     public List<(int x, int y)> FindShortestPath()
@@ -48,7 +49,7 @@ public class MazeSolver
         {
             var current = queue.Dequeue();
 
-            if (current.x == endX && current.y == endY)
+            if (endPositions.Contains((current.x, current.y)))
             {
                 return current.path;
             }

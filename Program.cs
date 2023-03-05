@@ -26,10 +26,10 @@ class Program
         string[] maze = File.ReadAllLines($"./mazes/{file}");
 
         MazeSolver solver = new MazeSolver(file);
-        
+
         List<(int x, int y)> path = solver.FindShortestPath();
 
-        
+
         foreach (var position in path)
         {
             maze[position.x] = maze[position.x].Substring(0, position.y) + "@" + maze[position.x].Substring(position.y + 1);
@@ -39,6 +39,15 @@ class Program
         {
             Console.WriteLine(line);
         }
-        
+        if (path.Count >= 20)
+        {
+            Console.WriteLine("Route not found in 20 moves.");
+        }
+        if (path.Count >= 150)
+        {
+            Console.WriteLine("Route not found in 150 moves.");
+        }
+
+        Console.WriteLine($"Route found with {path.Count} moves");
     }
 }
